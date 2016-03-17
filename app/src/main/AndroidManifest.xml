@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.idadiani.currencyfeed">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--<application-->
+        <!--android:allowBackup="true"-->
+        <!--android:icon="@mipmap/ic_launcher"-->
+        <!--android:label="@string/app_name"-->
+        <!--android:supportsRtl="true"-->
+        <!--android:theme="@style/AppTheme">-->
+
+        <!--<receiver android:name=".Widget.WidgetProvider" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
+            <!--</intent-filter>-->
+
+            <!--<meta-data-->
+                <!--android:name="android.appwidget.provider"-->
+                <!--android:resource="@xml/demo_widget_provider" />-->
+        <!--</receiver>-->
+
+
+        <!--<service-->
+            <!--android:name=".Widget.WidgetService"-->
+            <!--android:exported="false"-->
+            <!--android:permission="android.permission.BIND_REMOTEVIEWS" />-->
+
+
+        <!--&lt;!&ndash;<receiver&ndash;&gt;-->
+            <!--&lt;!&ndash;android:name=".Widget.MyWidgetIntentReceiver"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:label="@string/app_name" >&ndash;&gt;-->
+            <!--&lt;!&ndash;<intent-filter>&ndash;&gt;-->
+                <!--&lt;!&ndash;<action android:name="com.javatechig.intent.action.UPDATE_WIDGET" />&ndash;&gt;-->
+            <!--&lt;!&ndash;</intent-filter>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;<meta-data&ndash;&gt;-->
+                <!--&lt;!&ndash;android:name="android.appwidget.provider"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:resource="@xml/demo_widget_provider" />&ndash;&gt;-->
+        <!--&lt;!&ndash;</receiver>&ndash;&gt;-->
+    <!--</application>-->
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.example.idadiani.currencyfeed.Activity.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name="com.example.idadiani.currencyfeed.Widget.WidgetProvider" >
+            <intent-filter>
+
+                <!-- This widget provider receives broadcast with following action name or simply onUpdate of AppWidgetProvider is called -->
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <!-- To receive broadcast with this string name -->
+                <action android:name="com.wordpress.laaptu.DATA_FETCHED" />
+            </intent-filter>
+            <!-- linking up xml file of appwidget-provider to AppWidgetProvider -->
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widgetinfo" />
+        </receiver>
+
+        <service
+            android:name=".Widget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <!--
+            Configuration activity which gets launched  on widget being
+            placed on homescreen for first time
+        -->
+        <activity android:name=".Activity.ConfigActivity" >
+
+            <!--
+                 This intent is required to be recognized
+                 this activity as appwidget configuration activity
+            -->
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".Classes.RemoteFetchService" />
+    </application>
+
+
+</manifest>
