@@ -6,9 +6,11 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.RemoteViews
 import com.example.idadiani.currencyfeed.Classes.RemoteFetchService
 import com.example.idadiani.currencyfeed.R
+import java.util.*
 
 /**
  * Created by i.dadiani on 2/26/2016.
@@ -35,21 +37,21 @@ class WidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action == DATA_FETCHED) {
-            val appWidgetId = intent.getIntExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID)
+            val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID)
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val remoteViews = updateWidgetListView(context, appWidgetId)
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+        } else if (intent.action == SYNC_CLICKED) {
+            Log.i("WidgetProvider ", "Refresh clicked")
+            val serviceIntent = Intent(context, RemoteFetchService::class.java)
+            context.startService(serviceIntent)
         }
     }
-
 
     private fun updateWidgetListView(context: Context, appWidgetId: Int): RemoteViews {
 
         // which layout to show on widget
-        val remoteViews = RemoteViews(context.packageName,
-                R.layout.widget_layout)
+        val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
 
         // RemoteViews Service needed to provide adapter for ListView
         val svcIntent = Intent(context, WidgetService::class.java)
@@ -60,6 +62,11 @@ class WidgetProvider : AppWidgetProvider() {
         svcIntent.data = Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME))
         // setting adapter to listview of the widget
         remoteViews.setRemoteAdapter(appWidgetId, R.id.widgetListView, svcIntent)
+        remoteViews.setOnClickPendingIntent(R.id.main_layout, getPendingSelfIntent(context, SYNC_CLICKED));
+
+        var date = Date().toString()
+        remoteViews.setTextViewText(R.id.date, date)
+
         // setting an empty view in case of no data
         remoteViews.setEmptyView(R.id.widgetListView, R.id.empty_view)
         return remoteViews

@@ -15,6 +15,7 @@ import org.w3c.dom.Element
 import org.xml.sax.InputSource
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
+import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 
 
@@ -63,10 +64,11 @@ class Parser {
                     record.data?.add(value)
                 }
                 records.add(record)
-
-                Log.i("Loop", node.nodeName)
+                Log.i("Data ", record.data.toString())
 
             }
+
+            Log.i("Parsed ", Date().toString())
 
             return records;
         }

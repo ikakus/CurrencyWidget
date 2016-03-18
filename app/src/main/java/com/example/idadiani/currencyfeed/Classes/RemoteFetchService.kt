@@ -4,6 +4,7 @@ import android.app.Service
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.IBinder
+import android.util.Log
 import com.example.idadiani.currencyfeed.Interfaces.LoadingDoneListener
 import com.example.idadiani.currencyfeed.Widget.WidgetProvider
 import java.util.*
@@ -45,6 +46,7 @@ class RemoteFetchService : Service(), LoadingDoneListener {
     private fun fetchDataFromWeb() {
         val parser = Parser()
         parser.parse(this)
+        Log.i("RemoteFetchService ", "Parser started")
     }
 
 

@@ -61,7 +61,7 @@ class ListViewProvider(context: Context, intent: Intent) : RemoteViewsService.Re
     override fun getViewAt(position: Int): RemoteViews {
         val remoteView = RemoteViews(context!!.packageName, R.layout.listview_row_item)
         val listItem = listItemList[position]
-        remoteView.setTextViewText(R.id.text, listItem.data.toString())
+        remoteView.setTextViewText(R.id.text, listItem.data?.elementAt(0) + " " + listItem.data?.elementAt(1) + " " + listItem.data?.elementAt(2) + " " + listItem.data?.elementAt(3))
         return remoteView
     }
 
