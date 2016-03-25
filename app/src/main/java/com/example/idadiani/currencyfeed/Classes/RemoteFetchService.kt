@@ -1,7 +1,6 @@
 package com.example.idadiani.currencyfeed.Classes
 
 import android.app.Service
-import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
@@ -13,7 +12,6 @@ import java.util.*
  * Created by i.dadiani on 3/17/2016.
  */
 class RemoteFetchService : Service(), LoadingDoneListener {
-    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     companion object {
         var listItemList: ArrayList<Parser.Record> = ArrayList()
     }
@@ -28,11 +26,6 @@ class RemoteFetchService : Service(), LoadingDoneListener {
      * initialize our AQuery class
      */
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID))
-            appWidgetId = intent.getIntExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID)
-
         fetchDataFromWeb()
         return super.onStartCommand(intent, flags, startId)
     }
@@ -59,7 +52,6 @@ class RemoteFetchService : Service(), LoadingDoneListener {
 
         val widgetUpdateIntent = Intent()
         widgetUpdateIntent.action = WidgetProvider.DATA_FETCHED
-        widgetUpdateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         sendBroadcast(widgetUpdateIntent)
 
         this.stopSelf()
@@ -67,6 +59,18 @@ class RemoteFetchService : Service(), LoadingDoneListener {
 
 
     override fun loaded(records: MutableList<Parser.Record>) {
+
+        // for testing purposes
+        //        var it = Parser.Record();
+        //        var rn = Random();
+        //        var answer = rn.nextInt(10) + 1;
+        //        it.data?.add(answer.toString())
+        //        it.data?.add(answer.toString())
+        //        it.data?.add(answer.toString())
+        //        it.data?.add(answer.toString())
+        //
+        //        listItemList = arrayListOf()
+
         listItemList = records as ArrayList<Parser.Record>
         populateWidget()
     }

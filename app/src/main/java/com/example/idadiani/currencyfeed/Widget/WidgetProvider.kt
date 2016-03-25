@@ -38,12 +38,10 @@ class WidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action == DATA_FETCHED) {
-            val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID)
             val appWidgetManager = AppWidgetManager.getInstance(context)
-            val remoteViews = updateWidgetListView(context, appWidgetId)
+            val remoteViews = updateWidgetListView(context, ComponentName(context.packageName, WidgetProvider::class.java.name).hashCode())
             appWidgetManager.updateAppWidget(ComponentName(context.packageName, WidgetProvider::class.java.name), remoteViews);
 
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
         } else if (intent.action == SYNC_CLICKED) {
             Log.i("WidgetProvider ", "Refresh clicked")
             val serviceIntent = Intent(context, RemoteFetchService::class.java)
@@ -64,7 +62,15 @@ class WidgetProvider : AppWidgetProvider() {
         // don't know its purpose to me right now
         svcIntent.data = Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME))
         // setting adapter to listview of the widget
-        remoteViews.setRemoteAdapter(appWidgetId, R.id.widgetListView, svcIntent)
+
+        //        val appWidgetManager = AppWidgetManager.getInstance(context)
+        //        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetListView);
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        var appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context.packageName, WidgetProvider::class.java.name))
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widgetListView);
+
+        remoteViews.setRemoteAdapter(R.id.widgetListView, svcIntent)
+
         remoteViews.setOnClickPendingIntent(R.id.main_layout, getPendingSelfIntent(context, SYNC_CLICKED));
 
         var date = Date().toString()
