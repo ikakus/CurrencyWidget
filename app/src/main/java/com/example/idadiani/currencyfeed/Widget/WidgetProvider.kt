@@ -3,6 +3,7 @@ package com.example.idadiani.currencyfeed.Widget
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -19,7 +20,7 @@ class WidgetProvider : AppWidgetProvider() {
     private val SYNC_CLICKED: String = "automaticWidgetSyncButtonClick"
 
     companion object {
-        val DATA_FETCHED = "com.wordpress.laaptu.DATA_FETCHED"
+        val DATA_FETCHED = "com.example.idadiani.currencyfeed.DATA_FETCHED"
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
@@ -40,6 +41,8 @@ class WidgetProvider : AppWidgetProvider() {
             val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID)
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val remoteViews = updateWidgetListView(context, appWidgetId)
+            appWidgetManager.updateAppWidget(ComponentName(context.packageName, WidgetProvider::class.java.name), remoteViews);
+
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
         } else if (intent.action == SYNC_CLICKED) {
             Log.i("WidgetProvider ", "Refresh clicked")

@@ -63,7 +63,7 @@
                 <!-- This widget provider receives broadcast with following action name or simply onUpdate of AppWidgetProvider is called -->
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <!-- To receive broadcast with this string name -->
-                <action android:name="com.wordpress.laaptu.DATA_FETCHED" />
+                <action android:name="com.example.idadiani.currencyfeed.DATA_FETCHED" />
             </intent-filter>
             <!-- linking up xml file of appwidget-provider to AppWidgetProvider -->
             <meta-data
